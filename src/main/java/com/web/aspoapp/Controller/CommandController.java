@@ -18,7 +18,7 @@ import javax.naming.directory.InvalidAttributesException;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = {"http://localhost:8080", "http://127.0.0.1:5500"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:5500"})
 public class CommandController {
 
     private final CommandService commandService;
