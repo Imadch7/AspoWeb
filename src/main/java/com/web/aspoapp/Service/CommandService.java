@@ -80,7 +80,7 @@ public class CommandService {
             return new CommandResult(new Command(""), "empty URL", "error", 1);
         }
         try{
-            Command cmd = new Command("docker exec -it"+containerId+" git clone "+repoUrl);
+            Command cmd = new Command("git clone "+repoUrl);
             if (containerId == null || containerId.trim().isEmpty()) {
                 throw new InvalidAttributesException("Container ID is not set.");
             }
