@@ -94,36 +94,31 @@ public class CommandService {
         }
     }
 
-    /**
-     * Executes a command and updates the current working directory if it's a 'cd' command.
-     * @param command The command to execute.
-     * @return The result of the command execution.
-     */
-    public CommandResult executeCmdinsideDocker(Command command) {
-
-        CommandResult result = commandResult.executeCommand("docker exec -it"+command.getCommand(), currentWorkingDirectory);
-
-        if (command.getCommand().trim().startsWith("cd ") && result.getExitCode() == 0) {
-            String newPath = result.getStdout().trim();
-            if (!newPath.isEmpty()) {
-                File newCwd = new File(newPath);
-                if (newCwd.exists() && newCwd.isDirectory()) {
-                    this.currentWorkingDirectory = newCwd;
-                    System.out.println("Updated CWD to: " + this.currentWorkingDirectory.getAbsolutePath());
-                    result.setStdout(this.currentWorkingDirectory.getAbsolutePath());
-                    result.setStderr("");
-                } else {
-                    result.setStderr("Error:can not moviing to : " + newPath + " (invalid path or not exist)\n");
-                    result.setExitCode(1);
-                    result.setStdout("");
+    public String readFile(String path) {
+    	if(path == null || path.isEmpty()){
+    		return "NONE";
+    	}
+    	StringBuilder content = new StringBuilder();
+    	Bufferedreader reader = null;
+    	try{
+    		reader = new Bufferedreader(new FileReader(path));
+    		String line;
+    		while((line = reader.readLine()) != null) {
+    			content.append(line).append("\n");
+    		}
+    		return content.toString();
+    	}catch(IOException e) {
+    		e.printStackTrace();
+    		return "Error";
+    	}finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            } else {
-                result.setStderr("Error: 'cd'.\n");
-                result.setExitCode(1);
-                result.setStdout("");
             }
-        }
-        return result;
+      }
     }
 
 }
