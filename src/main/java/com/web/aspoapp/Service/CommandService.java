@@ -23,7 +23,7 @@ public class CommandService {
     private final String containerId = "container_id";
 
     public CommandService() {
-        this.currentWorkingDirectory = new File(System.getProperty("user.home"));
+        this.currentWorkingDirectory = new File(System.getProperty("user.dir"));
         System.out.println("CommandService initialized. Current working directory on Host: " + currentWorkingDirectory.getAbsolutePath());
     }
 
@@ -81,9 +81,6 @@ public class CommandService {
         }
         try{
             Command cmd = new Command("git clone "+repoUrl);
-            if (containerId == null || containerId.trim().isEmpty()) {
-                throw new InvalidAttributesException("Container ID is not set.");
-            }
             CommandResult result = executeCommand(cmd);
             if (result.getExitCode() == 0) {
                 result.setStdout("repo cloned.");
