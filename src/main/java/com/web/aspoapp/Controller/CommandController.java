@@ -43,20 +43,14 @@ public class CommandController {
         }
     }
 
-    @PostMapping("/executeDocker")
-    public ResponseEntity<CommandResult> executeCommandDocker(@RequestBody Command command) {
-        if (command == null || command.getCommand() == null || command.getCommand().trim().isEmpty()) {
-            return new ResponseEntity<>(new CommandResult(new Command(""), "Commande vide.","error", 1), HttpStatus.BAD_REQUEST);
-        }
+    @GetMapping("/MockResult")
+    public ResponseEntity<String> showMockFile(){
+    	return new ResponseEntity<>(commandService.readFile("/home/imad_hacker/Desktop/asss/aspo-main/releases/aspo-1.1.0/.aspo/2025-05-26/Hello.json"),HttpStatus.OK);
+    }
 
-        try {
-            // Directly execute the command via the service
-            CommandResult result = commandService.executeCmdinsideDocker(command);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(new CommandResult(new Command(""),"", "Erreur interne du serveur: " + e.getMessage(), 1), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @GetMapping("/url")
+    public ResponseEntity<String> showurl(@RequestBody String repoUrl){
+    	return new ResponseEntity<>(repoUrl,HttpStatus.OK);
     }
 
     @PostMapping("/clone_repo")
